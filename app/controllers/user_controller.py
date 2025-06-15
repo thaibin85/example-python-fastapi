@@ -5,6 +5,8 @@ from app.database import get_db
 from app.services.user_service import UserService
 from typing import Dict, Any
 
+from app.utils.exception import NotFoundException
+
 class UserController(BaseController):
     def __init__(self):
         super().__init__()
@@ -15,6 +17,7 @@ class UserController(BaseController):
         self.router.post("/register")(self.register)
         self.router.post("/login")(self.login)
         self.router.get("/cookies")(self.get_cookies)
+        self.router.get("/not-found")(self.test_not_found)
         
     async def get_all_users(self, db: Session = Depends(get_db)):
         user_service = UserService(db)
@@ -54,6 +57,9 @@ class UserController(BaseController):
                    username: str, 
                    password: str, 
                    db: Session = Depends(get_db)) -> Dict[str, Any]:
+        # Add a breakpoint on this line by clicking in the left margin
+        print(f"Login attempt for user: {username}")  # Debug line
+        
         user_service = UserService(db)
         try:
             return user_service.authenticate_user(username, password)
@@ -65,3 +71,6 @@ class UserController(BaseController):
             
     async def get_cookies(self):
         return {"message": "Here are your cookies 🍪"}
+    
+    async def test_not_found(self):
+        raise NotFoundException("Resource not found")

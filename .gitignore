@@ -75,3 +75,7 @@ app.db
 alembic/versions/*.py
 !alembic/versions/__init__.py
 test.db
+
+# .env files
+.env.test
+.env.prod

@@ -21,7 +21,8 @@ class URLRegistry:
         """
         for controller_class, prefix in self._controllers:
             controller = controller_class()
-            app.include_router(controller.router, prefix=prefix)
+            tag = controller_class.__name__.replace('Controller', '')
+            app.include_router(controller.router, prefix=prefix, tags=[tag])
 
 
 # Create the URL registry and register all controllers
